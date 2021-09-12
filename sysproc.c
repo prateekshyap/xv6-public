@@ -6,6 +6,7 @@
 #include "memlayout.h"
 #include "mmu.h"
 #include "proc.h"
+#include "stddef.h"
 
 int
 sys_fork(void)
@@ -94,4 +95,24 @@ int
 sys_getyear(void)
 {
   return 2020;
+}
+
+int
+sys_draw(void)
+{
+  const char pic[] = "           __________ \n         .'----------`.\n         | .--------. |\n         | |########| |       __________\n         | |########| |      /__________\\\n.--------| `--------' |------|    --=-- |-------------.\n|        `----,-.-----'      |o ======  |             |\n|       ______|_|_______     |__________|             |\n|      /  kkkkkkkkkkkk  \\                             |\n|     /  kkkkkkkkkkkkkk  \\                            |\n|     ^^^^^^^^^^^^^^^^^^^^                            |\n+-----------------------------------------------------+\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\0";
+  int bufferSize;
+  char * buffer;
+
+  int picSize = sizeof(pic);
+
+  int bufferSizeFetchError = argint(1,&bufferSize) < 0 ? 1 : 0;
+  int bufferFetchError = argptr(0,&buffer,bufferSize) < 0 ? 1 : -1;
+
+  if (bufferSize < picSize || bufferSizeFetchError > 0 || bufferFetchError > 0)
+    return -1;
+
+  memmove(buffer,pic,(uint)picSize);
+
+  return picSize;
 }

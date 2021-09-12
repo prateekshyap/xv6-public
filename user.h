@@ -24,6 +24,7 @@ char* sbrk(int);
 int sleep(int);
 int uptime(void);
 int getyear(void);
+int draw(void *, uint);
 
 // ulib.c
 int stat(const char*, struct stat*);
